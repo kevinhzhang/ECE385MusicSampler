@@ -1,0 +1,2 @@
+module MusicSampler();
+endmodule
