@@ -7,10 +7,10 @@ module lab7_soc (
 		input  wire        accum_export,                   //                   accum.export
 		input  wire        clk_clk,                        //                     clk.clk
 		output wire [15:0] hex_digits_export,              //              hex_digits.export
-		input  wire        i2cserial_sda_in,               //               i2cserial.sda_in
-		input  wire        i2cserial_scl_in,               //                        .scl_in
-		output wire        i2cserial_sda_oe,               //                        .sda_oe
-		output wire        i2cserial_scl_oe,               //                        .scl_oe
+		input  wire        i2c0_sda_in,                    //                    i2c0.sda_in
+		input  wire        i2c0_scl_in,                    //                        .scl_in
+		output wire        i2c0_sda_oe,                    //                        .sda_oe
+		output wire        i2c0_scl_oe,                    //                        .scl_oe
 		input  wire [1:0]  key_external_connection_export, // key_external_connection.export
 		output wire [7:0]  keycode_export,                 //                 keycode.export
 		output wire [13:0] leds_export,                    //                    leds.export
@@ -171,10 +171,10 @@ module lab7_soc (
 		.write     (mm_interconnect_0_i2c_0_csr_write),     //                 .write
 		.writedata (mm_interconnect_0_i2c_0_csr_writedata), //                 .writedata
 		.readdata  (mm_interconnect_0_i2c_0_csr_readdata),  //                 .readdata
-		.sda_in    (i2cserial_sda_in),                      //       i2c_serial.sda_in
-		.scl_in    (i2cserial_scl_in),                      //                 .scl_in
-		.sda_oe    (i2cserial_sda_oe),                      //                 .sda_oe
-		.scl_oe    (i2cserial_scl_oe),                      //                 .scl_oe
+		.sda_in    (i2c0_sda_in),                           //       i2c_serial.sda_in
+		.scl_in    (i2c0_scl_in),                           //                 .scl_in
+		.sda_oe    (i2c0_sda_oe),                           //                 .sda_oe
+		.scl_oe    (i2c0_scl_oe),                           //                 .scl_oe
 		.src_data  (),                                      //      (terminated)
 		.src_valid (),                                      //      (terminated)
 		.src_ready (1'b0),                                  //      (terminated)

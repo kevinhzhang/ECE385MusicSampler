@@ -40,15 +40,15 @@ refer to the applicable agreement for further details.
 	(port
 		(pt 0 192)
 		(input)
-		(text "i2cserial_sda_in" (rect 0 0 62 12)(font "Arial" (font_size 8)))
-		(text "i2cserial_sda_in" (rect 4 181 100 192)(font "Arial" (font_size 8)))
+		(text "i2c0_sda_in" (rect 0 0 47 12)(font "Arial" (font_size 8)))
+		(text "i2c0_sda_in" (rect 4 181 70 192)(font "Arial" (font_size 8)))
 		(line (pt 0 192)(pt 192 192)(line_width 1))
 	)
 	(port
 		(pt 0 208)
 		(input)
-		(text "i2cserial_scl_in" (rect 0 0 59 12)(font "Arial" (font_size 8)))
-		(text "i2cserial_scl_in" (rect 4 197 100 208)(font "Arial" (font_size 8)))
+		(text "i2c0_scl_in" (rect 0 0 43 12)(font "Arial" (font_size 8)))
+		(text "i2c0_scl_in" (rect 4 197 70 208)(font "Arial" (font_size 8)))
 		(line (pt 0 208)(pt 192 208)(line_width 1))
 	)
 	(port
@@ -96,15 +96,15 @@ refer to the applicable agreement for further details.
 	(port
 		(pt 0 224)
 		(output)
-		(text "i2cserial_sda_oe" (rect 0 0 66 12)(font "Arial" (font_size 8)))
-		(text "i2cserial_sda_oe" (rect 4 213 100 224)(font "Arial" (font_size 8)))
+		(text "i2c0_sda_oe" (rect 0 0 50 12)(font "Arial" (font_size 8)))
+		(text "i2c0_sda_oe" (rect 4 213 70 224)(font "Arial" (font_size 8)))
 		(line (pt 0 224)(pt 192 224)(line_width 1))
 	)
 	(port
 		(pt 0 240)
 		(output)
-		(text "i2cserial_scl_oe" (rect 0 0 62 12)(font "Arial" (font_size 8)))
-		(text "i2cserial_scl_oe" (rect 4 229 100 240)(font "Arial" (font_size 8)))
+		(text "i2c0_scl_oe" (rect 0 0 47 12)(font "Arial" (font_size 8)))
+		(text "i2c0_scl_oe" (rect 4 229 70 240)(font "Arial" (font_size 8)))
 		(line (pt 0 240)(pt 192 240)(line_width 1))
 	)
 	(port
@@ -226,7 +226,7 @@ refer to the applicable agreement for further details.
 		(text "clk" (rect 197 107 412 224)(font "Arial" (color 0 0 0)))
 		(text "hex_digits" (rect 134 123 328 259)(font "Arial" (color 128 0 0)(font_size 9)))
 		(text "export" (rect 197 147 430 304)(font "Arial" (color 0 0 0)))
-		(text "i2cserial" (rect 145 163 344 339)(font "Arial" (color 128 0 0)(font_size 9)))
+		(text "i2c0" (rect 170 163 364 339)(font "Arial" (color 128 0 0)(font_size 9)))
 		(text "sda_in" (rect 197 187 430 384)(font "Arial" (color 0 0 0)))
 		(text "scl_in" (rect 197 203 430 416)(font "Arial" (color 0 0 0)))
 		(text "sda_oe" (rect 197 219 430 448)(font "Arial" (color 0 0 0)))

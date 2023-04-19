@@ -41,14 +41,6 @@
          type = "String";
       }
    }
-   element VGA_text_mode_controller_0.avl_mm_slave_1
-   {
-      datum baseAddress
-      {
-         value = "16384";
-         type = "String";
-      }
-   }
    element accumulator
    {
       datum _sortIndex
@@ -395,7 +387,7 @@
    internal="hex_digits_pio.external_connection"
    type="conduit"
    dir="end" />
- <interface name="i2cserial" internal="i2c_0.i2c_serial" type="conduit" dir="end" />
+ <interface name="i2c0" internal="i2c_0.i2c_serial" type="conduit" dir="end" />
  <interface
    name="key_external_connection"
    internal="key.external_connection"
