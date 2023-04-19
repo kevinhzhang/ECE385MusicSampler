@@ -9,24 +9,19 @@ module rendering(
 	logic pixel_clk, blank, sync;
 	logic [9:0] DrawX, DrawY;
 	
-	logic [3:0] bck_red, bck_green, bck_blue;
+	logic [3:0] gray;
 	
 	vga_controller vga(.*);
 	
-	ledger ledg(
-		.*, 
-		.red(bck_red), 
-		.green(bck_green), 
-		.blue(bck_blue)
-	);
+	ledger ledg(.*);
 	
 	// modify once note-drawing is added
 	always_ff @(posedge pixel_clk) begin: COLORS
 	
-		if(!blank) begin
-			red <= bck_red;
-			green <= bck_green;
-			blue <= bck_blue;
+		if(blank) begin // blank is active low
+			red <= gray;
+			green <= gray;
+			blue <= gray;
 		end
 		else begin
 			red <= 0;

@@ -1,6 +1,7 @@
 module ledger(
+	input Clk,
 	input [9:0] DrawX, DrawY,
-	output logic [3:0] red, green, blue
+	output logic [3:0] gray
 );
 
 	parameter rows = 480;
@@ -14,9 +15,10 @@ module ledger(
 		$readmemh("imgarray.txt", RAM);
 	end
 	
-	assign value = RAM[80*DrawY[9:4] + DrawX[9:3]];
-	assign red = value[(7 - (DrawX[2:0] << 2)) +:4]; // little endian
-	assign blue = red;
-	assign green = red;
+	always_ff @(posedge Clk) begin
+		value <= RAM[80*DrawY + DrawX[9:3]];
+	end
+	
+	assign gray = value[((7 - DrawX[2:0]) << 2) +:4]; // little endian
 
 endmodule
