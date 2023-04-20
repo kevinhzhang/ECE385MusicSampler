@@ -204,5 +204,16 @@ i2s_output i2s_out(.clk(MAX10_CLK1_50),
 		
 		
 	 );
+	 
+	 // Move this to SoC once bus is interfaced
+	 rendering rend(
+		.Clk(MAX10_CLK1_50),
+		.Reset(Reset_h),
+		.hs(VGA_HS),
+		.vs(VGA_VS),
+		.red(VGA_R),
+		.green(VGA_G),
+		.blue(VGA_B)
+	 );
 
 endmodule
