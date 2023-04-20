@@ -101,12 +101,26 @@ logic i2c0_scl_in, i2c0_sda_in, i2c0_scl_oe, i2c0_sda_oe;
     assign ARDUINO_IO[14] = i2c0_sda_oe ? 1'b0 : 1'bz;
 
     //Connect Line-In to Line-Out (delete later when create I2S)
-    assign ARDUINO_IO[2] = ARDUINO_IO[1];
-    assign ARDUINO_IO[1] = 1'bz;
+//    assign ARDUINO_IO[2] = ARDUINO_IO[1];
+//    assign ARDUINO_IO[1] = 1'bz;
 	
-	
-	
-	
+//in theory this should work
+
+logic [31:0] l_out, r_out;
+
+i2s_input i2s_in(.clk(MAX10_CLK1_50), 
+				.sclk(ARDUINO_IO[5]),
+				.lrclk(ARDUINO_IO[4]),
+				.data_in(ARDUINO_IO[2]),
+				.l_out, .r_out);
+//DEBUG OUTPUT
+i2s_output i2s_out(.clk(MAX10_CLK1_50), 
+				.sclk(ARDUINO_IO[5]),
+				.lrclk(ARDUINO_IO[4]),
+				.data_l(l_out), 
+				.data_r(r_out),
+				.d_out(ARDUINO_IO[1]));
+
 	
 	
 	//Assignments specific to Sparkfun USBHostShield-v13
