@@ -102,6 +102,7 @@ logic i2c0_scl_in, i2c0_sda_in, i2c0_scl_oe, i2c0_sda_oe;
 
     //Connect Line-In to Line-Out (delete later when create I2S)
 //    assign ARDUINO_IO[2] = ARDUINO_IO[1];
+////	 Makes this pin "read-only?"
 //    assign ARDUINO_IO[1] = 1'bz;
 	
 //in theory this should work
@@ -111,15 +112,15 @@ logic [31:0] l_out, r_out;
 i2s_input i2s_in(.clk(MAX10_CLK1_50), 
 				.sclk(ARDUINO_IO[5]),
 				.lrclk(ARDUINO_IO[4]),
-				.data_in(ARDUINO_IO[2]),
+				.data_in(ARDUINO_IO[1]),
 				.l_out, .r_out);
 //DEBUG OUTPUT
 i2s_output i2s_out(.clk(MAX10_CLK1_50), 
 				.sclk(ARDUINO_IO[5]),
 				.lrclk(ARDUINO_IO[4]),
-				.data_l(l_out), 
-				.data_r(r_out),
-				.d_out(ARDUINO_IO[1]));
+				.data_l({1'b0, l_out[30:7], 7'b0}), 
+				.data_r({1'b0, r_out[30:7], 7'b0}),
+				.d_out(ARDUINO_IO[2]));
 
 	
 	
@@ -148,9 +149,12 @@ i2s_output i2s_out(.clk(MAX10_CLK1_50),
 	assign HEX0[7] = 1'b1;
 	
 	//fill in the hundreds digit as well as the negative sign
-	assign HEX5 = {1'b1, ~signs[1], 3'b111, ~hundreds[1], ~hundreds[1], 1'b1};
-	assign HEX2 = {1'b1, ~signs[0], 3'b111, ~hundreds[0], ~hundreds[0], 1'b1};
-	
+//	assign HEX5 = {1'b1, ~signs[1], 3'b111, ~hundreds[1], ~hundreds[1], 1'b1};
+//	assign HEX2 = {1'b1, ~signs[0], 3'b111, ~hundreds[0], ~hundreds[0], 1'b1};
+	HexDriver hex_driver11 ({3'b000,ARDUINO_IO[1]}, HEX2[6:0]);
+	HexDriver hex_driver12 ({3'b000,ARDUINO_IO[2]}, HEX5[6:0]);
+	assign HEX5[7] = 0;
+	assign HEX2[7] = 0;
 	
 	assign {Reset_h}=~ (KEY[0]); 
 
