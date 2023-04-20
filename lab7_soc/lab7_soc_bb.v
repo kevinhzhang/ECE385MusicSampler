@@ -3,6 +3,10 @@ module lab7_soc (
 	accum_export,
 	clk_clk,
 	hex_digits_export,
+	i2c0_sda_in,
+	i2c0_scl_in,
+	i2c0_sda_oe,
+	i2c0_scl_oe,
 	key_external_connection_export,
 	keycode_export,
 	leds_export,
@@ -23,15 +27,15 @@ module lab7_soc (
 	spi0_SS_n,
 	usb_gpx_export,
 	usb_irq_export,
-	usb_rst_export,
-	i2cserial_sda_in,
-	i2cserial_scl_in,
-	i2cserial_sda_oe,
-	i2cserial_scl_oe);	
+	usb_rst_export);	
 
 	input		accum_export;
 	input		clk_clk;
 	output	[15:0]	hex_digits_export;
+	input		i2c0_sda_in;
+	input		i2c0_scl_in;
+	output		i2c0_sda_oe;
+	output		i2c0_scl_oe;
 	input	[1:0]	key_external_connection_export;
 	output	[7:0]	keycode_export;
 	output	[13:0]	leds_export;
@@ -53,8 +57,4 @@ module lab7_soc (
 	input		usb_gpx_export;
 	input		usb_irq_export;
 	output		usb_rst_export;
-	input		i2cserial_sda_in;
-	input		i2cserial_scl_in;
-	output		i2cserial_sda_oe;
-	output		i2cserial_scl_oe;
 endmodule
