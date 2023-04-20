@@ -50,6 +50,7 @@
 *.sopc_builder
 *.summary
 *.tcl
+*.o
 *.txt # Explicitly add any text files used
 *~
 *example*
@@ -65,5 +66,6 @@
 */*_sim/
 incremental_db/
 db/
-_output_files/
+.metadata/
+output_files/
 PLLJ_PLLSPE_INFO.txt
