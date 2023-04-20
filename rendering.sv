@@ -9,7 +9,7 @@ module rendering(
 	logic pixel_clk, blank, sync;
 	logic [9:0] DrawX, DrawY;
 	
-	logic [3:0] gray;
+	logic draw_bck;
 	
 	vga_controller vga(.*);
 	
@@ -19,9 +19,9 @@ module rendering(
 	always_ff @(posedge pixel_clk) begin: COLORS
 	
 		if(blank) begin // blank is active low
-			red <= gray;
-			green <= gray;
-			blue <= gray;
+			red <= {4{draw_bck}};
+			green <= {4{draw_bck}};
+			blue <= {4{draw_bck}};
 		end
 		else begin
 			red <= 0;
