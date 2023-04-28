@@ -83,6 +83,6 @@ module note_rom (
 	};
 	
 	
-	assign data = ROM[addr_reg];
+	assign data = ROM[addr];
 
 endmodule
