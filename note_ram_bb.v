@@ -4,7 +4,7 @@
 // MODULE: altsyncram 
 
 // ============================================================
-// File Name: ram.v
+// File Name: note_ram.v
 // Megafunction Name(s):
 // 			altsyncram
 //
@@ -31,7 +31,7 @@
 //Intel and sold by Intel or its authorized distributors.  Please
 //refer to the applicable agreement for further details.
 
-module ram (
+module note_ram (
 	address_a,
 	address_b,
 	byteena_a,
@@ -114,7 +114,7 @@ endmodule
 // Retrieval info: PRIVATE: OPERATION_MODE NUMERIC "3"
 // Retrieval info: PRIVATE: OUTDATA_ACLR_B NUMERIC "0"
 // Retrieval info: PRIVATE: OUTDATA_REG_B NUMERIC "0"
-// Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "0"
+// Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "2"
 // Retrieval info: PRIVATE: READ_DURING_WRITE_MODE_MIXED_PORTS NUMERIC "1"
 // Retrieval info: PRIVATE: READ_DURING_WRITE_MODE_PORT_A NUMERIC "4"
 // Retrieval info: PRIVATE: READ_DURING_WRITE_MODE_PORT_B NUMERIC "4"
@@ -156,6 +156,7 @@ endmodule
 // Retrieval info: CONSTANT: OUTDATA_REG_A STRING "UNREGISTERED"
 // Retrieval info: CONSTANT: OUTDATA_REG_B STRING "UNREGISTERED"
 // Retrieval info: CONSTANT: POWER_UP_UNINITIALIZED STRING "FALSE"
+// Retrieval info: CONSTANT: RAM_BLOCK_TYPE STRING "M9K"
 // Retrieval info: CONSTANT: READ_DURING_WRITE_MODE_MIXED_PORTS STRING "OLD_DATA"
 // Retrieval info: CONSTANT: READ_DURING_WRITE_MODE_PORT_A STRING "NEW_DATA_WITH_NBE_READ"
 // Retrieval info: CONSTANT: READ_DURING_WRITE_MODE_PORT_B STRING "NEW_DATA_WITH_NBE_READ"
@@ -192,10 +193,10 @@ endmodule
 // Retrieval info: CONNECT: @wren_b 0 0 0 0 wren_b 0 0 0 0
 // Retrieval info: CONNECT: q_a 0 0 32 0 @q_a 0 0 32 0
 // Retrieval info: CONNECT: q_b 0 0 32 0 @q_b 0 0 32 0
-// Retrieval info: GEN_FILE: TYPE_NORMAL ram.v TRUE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ram.inc FALSE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ram.cmp FALSE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ram.bsf FALSE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ram_inst.v FALSE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ram_bb.v TRUE
+// Retrieval info: GEN_FILE: TYPE_NORMAL note_ram.v TRUE
+// Retrieval info: GEN_FILE: TYPE_NORMAL note_ram.inc FALSE
+// Retrieval info: GEN_FILE: TYPE_NORMAL note_ram.cmp FALSE
+// Retrieval info: GEN_FILE: TYPE_NORMAL note_ram.bsf FALSE
+// Retrieval info: GEN_FILE: TYPE_NORMAL note_ram_inst.v FALSE
+// Retrieval info: GEN_FILE: TYPE_NORMAL note_ram_bb.v TRUE
 // Retrieval info: LIB_FILE: altera_mf

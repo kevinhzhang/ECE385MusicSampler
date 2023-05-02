@@ -35,19 +35,19 @@ module rendering(
 	
 	// TODO: VRAM 
 	
-	ram ram0(
-	.address_a(AVL_ADDR[10:0]), 
+	note_ram ram0(
+	.address_a(AVL_ADDR), 
 	.address_b(ADDR), 
 	.byteena_a(AVL_BYTE_EN),
-	.byteena_b(BYTE_EN),
-	.clock(CLK),
+	.byteena_b(4'b1111),
+	.clock(Clk),
 	.data_a(AVL_WRITEDATA),
 	.data_b(32'b0),
-	.rden_a(AVL_READ & ~(AVL_ADDR[11]) & AVL_CS),
+	.rden_a(AVL_READ & AVL_CS),
 	.rden_b(1'b1),
-	.wren_a(AVL_WRITE & ~(AVL_ADDR[11]) & AVL_CS),
+	.wren_a(AVL_WRITE & AVL_CS),
 	.wren_b(1'b0),
-	.q_a(temp_avl_readdata),
+	.q_a(AVL_READDATA),
 	.q_b(READDATA)	
 		
 	);
@@ -82,18 +82,19 @@ module rendering(
 		.data(dot_data)
 	);
 	
-	always_ff @(posedge Clk) begin
-		if (AVL_READ && AVL_CS) begin
-			AVL_READDATA <= temp_avl_readdata;
-		end
-	end
+//	always_ff @(posedge Clk) begin
+//		if (AVL_READ && AVL_CS) begin
+//			AVL_READDATA <= temp_avl_readdata;
+//		end
+//	end
 	
 	// determine if should draw
 	assign pixel_on = draw_bck & ~(
-	note_data[7 - DrawX[2:0]] ^ 
-	LL_data[7 - DrawX[2:0]] ^ 
-	line_data[7 - DrawX[2:0]] ^
+	note_data[7 - DrawX[2:0]] | 
+	LL_data[7 - DrawX[2:0]] | 
+	line_data[7 - DrawX[2:0]] |
 	dot_data[7 - DrawX[2:0]]);
+	//assign pixel_on = LL_data[7 - DrawX[2:0]];
 	
 	// drawing logic
 	always_ff @(posedge pixel_clk) begin: COLORS
