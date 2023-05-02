@@ -3,7 +3,7 @@ module note_rom (
 	output [7:0] data
 );
 
-	parameter ADDR_WIDTH = 5;
+	parameter ADDR_WIDTH = 8;
 	parameter DATA_WIDTH = 8;
 	
 	// ROM definition
@@ -295,7 +295,7 @@ module note_rom (
         8'b00000000, // 4
         8'b00000000, // 5
         8'b00000000, // 6
-        8'b00000000 // 7
+        8'b00000000  // 7
 	};
 	
 	

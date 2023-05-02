@@ -3,7 +3,7 @@ module line_rom(
 	output [7:0] data
 );
 
-	parameter ADDR_WIDTH = 2;
+	parameter ADDR_WIDTH = 5;
 	parameter DATA_WIDTH = 8;
 	
 	// ROM definition

@@ -3,7 +3,7 @@ module ledger_line_rom (
 	output [7:0] data
 );
 
-	parameter ADDR_WIDTH = 2;
+	parameter ADDR_WIDTH = 5;
 	parameter DATA_WIDTH = 8;
 	
 	parameter[0:2**ADDR_WIDTH-1][DATA_WIDTH-1:0] ROM = {
@@ -34,7 +34,7 @@ module ledger_line_rom (
         8'b00000000, // 5
         8'b00000000, // 6
         8'b00000000, // 7
-		  // CODE 0x02 - BELOW
+		  // CODE 0x03 - BELOW
         8'b00000000, // 0
         8'b00000000, // 1
         8'b00000000, // 2
@@ -43,15 +43,6 @@ module ledger_line_rom (
         8'b00000000, // 5
         8'b00000000, // 6
         8'b11111111, // 7  ********
-		  // CODE 0x03 - RESERVE TEST
-        8'b00000000, // 0
-        8'b00000000, // 1
-        8'b01000100, // 2
-        8'b01000100, // 3
-        8'b00000000, // 4
-        8'b10000001, // 5
-        8'b11111111, // 6
-        8'b00000000  // 7
 	};
 	
 	assign data = ROM[addr];

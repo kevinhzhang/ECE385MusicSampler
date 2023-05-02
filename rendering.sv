@@ -5,8 +5,8 @@ module rendering(
 	input logic AVL_READ,
 	input logic AVL_WRITE,
 	input logic AVL_CS,
-	input logic AVL_BYTE_EN,
-	input logic [11:0] AVL_ADDR, // 80 cols * 60 rows / 2 chars per address
+	input logic [3:0] AVL_BYTE_EN,
+	input logic [12:0] AVL_ADDR, // 80 cols * 60 rows / 2 chars per address
 	input logic [31:0] AVL_WRITEDATA,
 	output logic [31:0] AVL_READDATA,
 	
@@ -21,8 +21,8 @@ module rendering(
 	logic [7:0] note_data, line_data, LL_data, dot_data;
 	
 	// memory variables
-	logic [11:0] reg_idx;
-	logic [10:0] ADDR;
+	logic [12:0] reg_idx;
+	logic [11:0] ADDR;
 	logic [3:0] BYTE_EN;
 	logic [31:0] READDATA;
 	//logic [15:0] glyph;
@@ -36,10 +36,10 @@ module rendering(
 	// TODO: VRAM 
 	
 	note_ram ram0(
-	.address_a(AVL_ADDR), 
+	.address_a(AVL_ADDR[11:0]), 
 	.address_b(ADDR), 
 	.byteena_a(AVL_BYTE_EN),
-	.byteena_b(4'b1111),
+	.byteena_b(BYTE_EN),
 	.clock(Clk),
 	.data_a(AVL_WRITEDATA),
 	.data_b(32'b0),
@@ -47,7 +47,7 @@ module rendering(
 	.rden_b(1'b1),
 	.wren_a(AVL_WRITE & AVL_CS),
 	.wren_b(1'b0),
-	.q_a(AVL_READDATA),
+	.q_a(temp_avl_readdata),
 	.q_b(READDATA)	
 		
 	);
@@ -82,19 +82,21 @@ module rendering(
 		.data(dot_data)
 	);
 	
-//	always_ff @(posedge Clk) begin
-//		if (AVL_READ && AVL_CS) begin
-//			AVL_READDATA <= temp_avl_readdata;
-//		end
-//	end
+	always_ff @(posedge Clk) begin
+		if (AVL_READ) begin
+			AVL_READDATA <= temp_avl_readdata;
+		end
+	end
 	
 	// determine if should draw
 	assign pixel_on = draw_bck & ~(
-	note_data[7 - DrawX[2:0]] | 
-	LL_data[7 - DrawX[2:0]] | 
-	line_data[7 - DrawX[2:0]] |
-	dot_data[7 - DrawX[2:0]]);
-	//assign pixel_on = LL_data[7 - DrawX[2:0]];
+	note_data[7 - ((DrawX) & 3'h7)] | 
+	LL_data[7 - ((DrawX) & 3'h7)] | 
+	line_data[7 - ((DrawX) & 3'h7)] |
+	dot_data[7 - ((DrawX) & 3'h7)]);
+//	assign pixel_on = draw_bck & ~(
+//	note_data[7 - ((DrawX) & 3'h7)] |
+//	LL_data[7 - ((DrawX) & 3'h7)]);
 	
 	// drawing logic
 	always_ff @(posedge pixel_clk) begin: COLORS
@@ -116,7 +118,7 @@ module rendering(
 	always_comb begin
 		reg_idx = ((80 * (DrawY >> 3)) + (DrawX >> 3));
 	
-		ADDR = reg_idx[11:1];
+		ADDR = reg_idx[12:1];
 		
 		case (reg_idx[0])
 			1'b0: begin
