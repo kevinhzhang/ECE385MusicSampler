@@ -108,12 +108,95 @@ logic i2c0_scl_in, i2c0_sda_in, i2c0_scl_oe, i2c0_sda_oe;
 //in theory this should work
 
 logic [31:0] l_out, r_out;
-
+ 
 i2s_input i2s_in(.clk(MAX10_CLK1_50), 
 				.sclk(ARDUINO_IO[5]),
 				.lrclk(ARDUINO_IO[4]),
 				.data_in(ARDUINO_IO[1]),
 				.l_out, .r_out);
+//fifo data in depends on clock	
+always_comb begin
+	if(ARDUINO_IO[4]) begin
+		data_fifo = l_out[30:19];
+		end
+	else begin
+		data_fifo = r_out[30:19];
+	end
+end
+
+logic [11:0] data_fifo, q_odd, q_even;
+logic read, empty_odd, empty_even, full_even, full_odd, write_even, write_odd, fft_read;
+logic alternate;
+logic [8:0] output_index;
+
+always_ff @ (posedge ARDUINO_IO[4]) begin
+	alternate <= ~alternate;
+end
+
+
+FFT_fifo fifo_odd(.data(data_fifo),
+	.rdclk(MAX10_CLK1_50),
+	.rdreq(read),
+	.wrclk(~alternate),
+	.wrreq(write_odd),
+	.q(q_odd),
+	.rdempty(empty_odd),
+	.wrfull(full_odd));
+	
+FFT_fifo fifo_even(.data(data_fifo),
+	.rdclk(MAX10_CLK1_50),
+	.rdreq(read),
+	.wrclk(alternate),
+	.wrreq(write_even),
+	.q(q_even),
+	.rdempty(empty_even),
+	.wrfull(full_even));
+
+logic reset_max;
+logic reset_h;
+sync reset_sync(.Clk(MAX10_CLK1_50), .d(~KEY[0]), .q(reset_h));
+ 
+control ctrl(.clk(MAX10_CLK1_50),
+					.reset(reset_h), 
+					.full_even,
+					.full_odd, 
+					.fft_read,
+					.write_odd,
+					.write_even,
+					.read,
+					.reset_fft,
+					.reset_max,
+					.fft_start,
+					.output_index
+					);
+logic [15:0] real0, imag0, real1, imag1,doext, deext;
+
+sext1216 so(.p(q_odd), .q(doext));
+sext1216 se(.p(q_even), .q(deext));
+
+
+dft_top dft(.clk(MAX10_CLK1_50),
+				.reset(reset_fft),
+				.next(fft_start),
+				.next_out(fft_read), 
+				.X0(doext),
+				.X1(16'b0),
+				.X2(deext),
+				.X3(16'b0), 
+				.Y0(real0),
+				.Y1(imag0),
+				.Y2(real1),
+				.Y3(imag1));
+logic [33:0] r0, r1, max, bigger;
+logic newval, onebig;
+assign r0 = real0 * real0 + imag0 * imag0;
+assign r1 = real1 * real1 + imag1 * imag1;
+assign onebig = (r1 > r0);
+assign bigger = (onebig) ? r1 : r0;
+assign newval = (max > bigger);
+assign max = (newval) ? max : bigger;
+logic [9:0] output_idx; 
+assign output_idx = (newval) ? (2 * output_index + onebig) : output_idx;
 //DEBUG OUTPUT
 i2s_output i2s_out(.clk(MAX10_CLK1_50), 
 				.sclk(ARDUINO_IO[5]),
@@ -122,7 +205,6 @@ i2s_output i2s_out(.clk(MAX10_CLK1_50),
 				.data_r({1'b0, r_out[30:7], 7'b0}),
 				.d_out(ARDUINO_IO[2]));
 
-	
 	
 	//Assignments specific to Sparkfun USBHostShield-v13
 	//assign ARDUINO_IO[7] = USB_RST;
@@ -136,25 +218,29 @@ i2s_output i2s_out(.clk(MAX10_CLK1_50),
 	assign USB_GPX = 1'b0;
 	
 	//HEX drivers to convert numbers to HEX output
+	HexDriver hex_driver5 (hex_num_5, HEX5[6:0]);
+	assign HEX5[7] = 1'b1;
+	
 	HexDriver hex_driver4 (hex_num_4, HEX4[6:0]);
 	assign HEX4[7] = 1'b1;
 	
 	HexDriver hex_driver3 (hex_num_3, HEX3[6:0]);
 	assign HEX3[7] = 1'b1;
-	
-	HexDriver hex_driver1 (hex_num_1, HEX1[6:0]);
+	HexDriver hex_driver2 ({2'b00, output_idx[9:8]}, HEX2[6:0]);
+	assign HEX2[7] = 1'b1;
+	HexDriver hex_driver1 (output_idx[7:4], HEX1[6:0]);
 	assign HEX1[7] = 1'b1;
 	
-	HexDriver hex_driver0 (hex_num_0, HEX0[6:0]);
+	HexDriver hex_driver0 (output_idx[3:0], HEX0[6:0]);
 	assign HEX0[7] = 1'b1;
 	
 	//fill in the hundreds digit as well as the negative sign
 //	assign HEX5 = {1'b1, ~signs[1], 3'b111, ~hundreds[1], ~hundreds[1], 1'b1};
 //	assign HEX2 = {1'b1, ~signs[0], 3'b111, ~hundreds[0], ~hundreds[0], 1'b1};
-	HexDriver hex_driver11 ({3'b000,ARDUINO_IO[1]}, HEX2[6:0]);
-	HexDriver hex_driver12 ({3'b000,ARDUINO_IO[2]}, HEX5[6:0]);
-	assign HEX5[7] = 0;
-	assign HEX2[7] = 0;
+//	HexDriver hex_driver11 ({3'b000,ARDUINO_IO[1]}, HEX2[6:0]);
+//	HexDriver hex_driver12 ({3'b000,ARDUINO_IO[2]}, HEX5[6:0]);
+//	assign HEX5[7] = 0;
+//	assign HEX2[7] = 0;
 	
 	assign {Reset_h}=~ (KEY[0]); 
 
@@ -205,7 +291,7 @@ i2s_output i2s_out(.clk(MAX10_CLK1_50),
 		
 	 );
 	 
-	 // Move this to SoC once bus is interfaced
+	 //  Move this to SoC once bus is interfaced
 	 rendering rend(
 		.Clk(MAX10_CLK1_50),
 		.Reset(Reset_h),
