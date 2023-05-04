@@ -141,7 +141,10 @@ FFT_fifo fifo_odd(.data(data_fifo),
 	.wrreq(write_odd),
 	.q(q_odd),
 	.rdempty(empty_odd),
-	.wrfull(full_odd));
+	.wrfull(full_odd),
+	.aclr(reset_h),
+	.rdusedw(),
+	.wrusedw());
 	
 FFT_fifo fifo_even(.data(data_fifo),
 	.rdclk(MAX10_CLK1_50),
@@ -150,7 +153,10 @@ FFT_fifo fifo_even(.data(data_fifo),
 	.wrreq(write_even),
 	.q(q_even),
 	.rdempty(empty_even),
-	.wrfull(full_even));
+	.wrfull(full_even),
+	.aclr(reset_h),
+	.rdusedw(),
+	.wrusedw());
 
 logic reset_max;
 logic reset_h;
