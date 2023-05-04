@@ -7,7 +7,7 @@ logic loadcount;
 logic countup;
 logic [8:0] input_count, out_index; 
 assign output_index = out_index;
-enum logic [3:0] {start, reset_state, listen, prepare, load_fft, load_sync, fft_wait, fft_out} State, Next_state;
+enum logic [3:0] {start, reset_state, listen, prepare, load_fft, fft_wait, fft_out} State, Next_state;
 
 always_ff @ (posedge clk)
 	begin
@@ -57,10 +57,10 @@ always_comb
 				Next_state = fft_out;
 		fft_out : 
 			if(out_index == 9'b111111111)
-				Next_state = load_sync;
-		load_sync : 
-			if (empty_even && empty_odd) 
 				Next_state = listen;
+//		load_sync : 
+//			if (empty_even && empty_odd) 
+//				Next_state = listen;
 		default : ;
 	endcase
 	
@@ -107,11 +107,11 @@ always_comb
 			write_even = 1'b0;
 			write_odd = 1'b0;
 			end
-		load_sync :
-			begin
-			write_even = 1'b0;
-			write_odd = 1'b0;
-			end
+//		load_sync :
+//			begin
+//			write_even = 1'b0;
+//			write_odd = 1'b0;
+//			end
 		default : ;
 	endcase
 end
