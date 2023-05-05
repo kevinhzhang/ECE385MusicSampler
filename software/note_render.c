@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 #include <alt_types.h>
 #include "note_render.h"
 
@@ -51,21 +52,26 @@ int drawnote(struct NOTE note, int timeslice) {
 
 	if (note.PITCH > -1) {
 		position = positions[note.PITCH];
-		line_flag = 1;
+		if (note.DURATION < 16) line_flag = 1;
 
-		// lilne should point DOWNWARDS
-		if (position < 12 || position < 5) {
+		// line should point DOWNWARDS
+		if ((position < 12 && position > 9) || position < 5) {
 			line_dir = 1;
 		}
+
+		//printf("Note position is %d\n", (int)position);
 	}
-	// Rest
 	else {
 		// just draw the rest in the middle
-		position = GRID_WIDTH - 12;
+		//printf("Arrived here.\n");
+		position = positions[note.PITCH + 31];
+		//printf("Rest position is %d\n", (int)position);
 	}
 
+	//printf("Position was set to %d\n", (int) position);
+
 	// need LL
-	if (position == 7 || ((position < 2) && (floorf(position) == position))) {
+	if (position == 7 || (position < 2)) {
 		LL_flag = 1;
 	}
 
@@ -106,6 +112,7 @@ int drawnote(struct NOTE note, int timeslice) {
 			else {
 				// whole note body
 				note_mask = 0x18;
+				//note_mask = 0x58; // debug only
 				//vram_ptr->VRAM[((grid*PART_HEIGHT + UPPER_Y + (int)position) * COLUMNS + (UPPER_X + offset) )*2 + 1] = note_mask;
 				//offset++;
 				vram_ptr->VRAM[((grid*PART_HEIGHT + UPPER_Y + (int)position) * COLUMNS + (UPPER_X + offset + 1) )*2 + 1] = note_mask + 0b00001000;
@@ -140,7 +147,7 @@ int drawnote(struct NOTE note, int timeslice) {
 			}
 			else {
 				// whole rest
-				note_mask = 0x58;
+				note_mask = 0x58; // 0b01011000
 				vram_ptr->VRAM[((grid*PART_HEIGHT + UPPER_Y + (int)position) * COLUMNS + (UPPER_X + offset) )*2 + 1] = note_mask;
 				offset++;
 				note_mask += 0b00001000;
@@ -180,14 +187,69 @@ int drawnote(struct NOTE note, int timeslice) {
 	}
 
 	if (LL_flag) {
-		LL_mask = 0x40;
+		if (floorf(position) == position) {
+			LL_mask = 0x40;
+		}
+		else if (position == 0.5) {
+			LL_mask = 0xC0;
+		}
+
 		vram_ptr->VRAM[((grid*PART_HEIGHT + UPPER_Y + (int)position) * COLUMNS + (UPPER_X + offset) )*2] |= LL_mask;
 		if (note.DURATION == 16) {
 			vram_ptr->VRAM[((grid*PART_HEIGHT + UPPER_Y + (int)position) * COLUMNS + (UPPER_X + offset - 1) )*2] |= LL_mask;
 		}
+
+		// need to draw other ledger line
+		if (position < 1) {
+			vram_ptr->VRAM[((grid*PART_HEIGHT + UPPER_Y + (int)position + 1) * COLUMNS + (UPPER_X + offset) )*2] |= LL_mask;
+			if (note.DURATION == 16) {
+				vram_ptr->VRAM[((grid*PART_HEIGHT + UPPER_Y + (int)position + 1) * COLUMNS + (UPPER_X + offset - 1) )*2] |= LL_mask;
+			}
+		}
 	}
 
-	// TODO - LL drawing, line (stem) drawing, dot and sharp drawing
+	// TODO - line (stem) drawing, tail drawing
+
+	if (sharp_flag) {
+		note_mask = 0xC0;
+		vram_ptr->VRAM[((grid*PART_HEIGHT + UPPER_Y + (int)position) * COLUMNS + (UPPER_X + offset + 1) )*2 + 1] = note_mask;
+		note_mask += 0b00001000;
+		vram_ptr->VRAM[((grid*PART_HEIGHT + UPPER_Y + (int)position + 1) * COLUMNS + (UPPER_X + offset + 1) )*2 + 1] = note_mask;
+	}
+
+	if (dot_flag) {
+		dot_mask = 0x01;
+		vram_ptr->VRAM[((grid*PART_HEIGHT + UPPER_Y + (int)position) * COLUMNS + (UPPER_X + offset + 1) )*2] |= dot_mask;
+	}
+
+	if (line_flag) {
+		if (line_dir == 0) {
+			line_mask = 0x08;
+			vram_ptr->VRAM[((grid*PART_HEIGHT + UPPER_Y + (int)position) * COLUMNS + (UPPER_X + offset) )*2] |= line_mask;
+			vram_ptr->VRAM[((grid*PART_HEIGHT + UPPER_Y + (int)position - 1) * COLUMNS + (UPPER_X + offset) )*2] |= line_mask;
+			vram_ptr->VRAM[((grid*PART_HEIGHT + UPPER_Y + (int)position - 2) * COLUMNS + (UPPER_X + offset) )*2] |= line_mask;
+
+			if (tail_flag) { // use upward tail
+				note_mask = 0x80;
+				vram_ptr->VRAM[((grid*PART_HEIGHT + UPPER_Y + (int)position - 2) * COLUMNS + (UPPER_X + offset + 1) )*2 + 1] |= note_mask;
+				note_mask += 0b00001000;
+				vram_ptr->VRAM[((grid*PART_HEIGHT + UPPER_Y + (int)position - 1) * COLUMNS + (UPPER_X + offset + 1) )*2 + 1] |= note_mask;
+			}
+		}
+		else {
+			line_mask = 0x10;
+			vram_ptr->VRAM[((grid*PART_HEIGHT + UPPER_Y + (int)position) * COLUMNS + (UPPER_X + offset) )*2] |= line_mask;
+			vram_ptr->VRAM[((grid*PART_HEIGHT + UPPER_Y + (int)position + 1) * COLUMNS + (UPPER_X + offset) )*2] |= line_mask;
+			vram_ptr->VRAM[((grid*PART_HEIGHT + UPPER_Y + (int)position + 2) * COLUMNS + (UPPER_X + offset) )*2] |= line_mask;
+
+			if (tail_flag) { // use downward tail
+				note_mask = 0x90; // 0b10010000
+				vram_ptr->VRAM[((grid*PART_HEIGHT + UPPER_Y + (int)position + 1) * COLUMNS + (UPPER_X + offset - 1) )*2 + 1] |= note_mask;
+				note_mask += 0b00001000;
+				vram_ptr->VRAM[((grid*PART_HEIGHT + UPPER_Y + (int)position + 2) * COLUMNS + (UPPER_X + offset - 1) )*2 + 1] |= note_mask;
+			}
+		}
+	}
 
 	return incr;
 }
@@ -259,6 +321,49 @@ void testsheet() {
 
 	n.PITCH = 19;
 	n.DURATION = 16;
+	ts += drawnote(n, ts);
+
+	usleep (500000);
+
+	//while(1){}
+
+	clear();
+
+
+	// debug tests
+	ts = 0;
+	n.PITCH = 44;
+	ts += drawnote(n, ts);
+
+	n.DURATION = 4;
+	n.PITCH = 42;
+	ts += drawnote(n, ts);
+
+	n.PITCH = 0;
+	n.DURATION = 2;
+	ts += drawnote(n, ts);
+
+	n.PITCH = -1;
+	n.DURATION = 16;
+	ts += drawnote(n, ts);
+
+	n.DURATION = 8;
+	ts += drawnote(n, ts);
+
+	n.DURATION = 4;
+	ts += drawnote(n, ts);
+
+	n.DURATION = 2;
+	ts += drawnote(n, ts);
+
+	n.PITCH = 30;
+	n.DURATION = 3;
+	ts += drawnote(n, ts);
+
+	n.DURATION = 6;
+	ts += drawnote(n, ts);
+
+	n.DURATION = 12;
 	ts += drawnote(n, ts);
 
 }
