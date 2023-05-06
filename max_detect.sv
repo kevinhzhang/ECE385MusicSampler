@@ -35,7 +35,7 @@ end
 always_ff @ (posedge clk)
 	begin
 //	ignores DC output
-		if(reset_fft) begin
+		if(output_index == 0) begin
 			max_idx <= 10'b0;
 			max <= 0; 
 			end
@@ -46,7 +46,7 @@ always_ff @ (posedge clk)
 
 	end
 
-always_ff @ (posedge reset_fft)
+always_ff @ (posedge output_index[8])
 	begin
 		output_idx <= max_idx; 
 	end
