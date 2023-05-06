@@ -12,12 +12,17 @@ create_clock -period "50.0 MHz" [get_ports MAX10_CLK2_50]
 
 create_clock -period "44.1 KHz" [get_ports ARDUINO_IO[4]]
 
+create_clock -period "5.5125 KHz" [get_registers downclk[2]]
 
 # SDRAM CLK
 create_generated_clock -source [get_pins { u0|altpll_0|sd1|pll7|clk[1] }] \
                       -name clk_dram_ext [get_ports {DRAM_CLK}]
-
-
+	
+#create_generated_clock -divide_by 8 -source [get_ports ARDUINO_IO[4]] \
+#    [get_registers downclk[2]]
+	 
+create_generated_clock -divide_by 2 -source [get_registers downclk[2]] \
+    [get_registers alternate]
 #**************************************************************
 # Create Generated Clock
 #**************************************************************

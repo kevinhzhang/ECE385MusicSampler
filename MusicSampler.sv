@@ -129,7 +129,12 @@ logic read, empty_odd, empty_even, full_even, full_odd, write_even, write_odd, f
 logic alternate;
 logic [8:0] output_index;
 
+logic [2:0] downclk;
 always_ff @ (posedge ARDUINO_IO[4]) begin
+	downclk <= downclk + 1;
+end
+
+always_ff @ (posedge downclk[2]) begin
 	alternate <= ~alternate;
 end
 
