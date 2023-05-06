@@ -27,10 +27,10 @@
 
 // ------------------------------------------
 // Generation parameters:
-//   output_name:         lab7_soc_mm_interconnect_0_cmd_demux
+//   output_name:         lab7_soc_mm_interconnect_0_cmd_demux_001
 //   ST_DATA_W:           108
 //   ST_CHANNEL_W:        18
-//   NUM_OUTPUTS:         18
+//   NUM_OUTPUTS:         17
 //   VALID_WIDTH:         1
 // ------------------------------------------
 
@@ -40,7 +40,7 @@
 // 15610 - Warning: Design contains x input pin(s) that do not drive logic
 //------------------------------------------
 
-module lab7_soc_mm_interconnect_0_cmd_demux
+module lab7_soc_mm_interconnect_0_cmd_demux_001
 (
     // -------------------
     // Sink
@@ -174,13 +174,6 @@ module lab7_soc_mm_interconnect_0_cmd_demux
     output reg                      src16_endofpacket,
     input                           src16_ready,
 
-    output reg                      src17_valid,
-    output reg [108-1    : 0] src17_data, // ST_DATA_W=108
-    output reg [18-1 : 0] src17_channel, // ST_CHANNEL_W=18
-    output reg                      src17_startofpacket,
-    output reg                      src17_endofpacket,
-    input                           src17_ready,
-
 
     // -------------------
     // Clock & Reset
@@ -192,7 +185,7 @@ module lab7_soc_mm_interconnect_0_cmd_demux
 
 );
 
-    localparam NUM_OUTPUTS = 18;
+    localparam NUM_OUTPUTS = 17;
     wire [NUM_OUTPUTS - 1 : 0] ready_vector;
 
     // -------------------
@@ -318,13 +311,6 @@ module lab7_soc_mm_interconnect_0_cmd_demux
 
         src16_valid         = sink_channel[16] && sink_valid;
 
-        src17_data          = sink_data;
-        src17_startofpacket = sink_startofpacket;
-        src17_endofpacket   = sink_endofpacket;
-        src17_channel       = sink_channel >> NUM_OUTPUTS;
-
-        src17_valid         = sink_channel[17] && sink_valid;
-
     end
 
     // -------------------
@@ -347,9 +333,8 @@ module lab7_soc_mm_interconnect_0_cmd_demux
     assign ready_vector[14] = src14_ready;
     assign ready_vector[15] = src15_ready;
     assign ready_vector[16] = src16_ready;
-    assign ready_vector[17] = src17_ready;
 
-    assign sink_ready = |(sink_channel & ready_vector);
+    assign sink_ready = |(sink_channel & {{1{1'b0}},{ready_vector[NUM_OUTPUTS - 1 : 0]}});
 
 endmodule
 

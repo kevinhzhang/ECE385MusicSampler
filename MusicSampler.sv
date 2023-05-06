@@ -301,18 +301,25 @@ i2s_output i2s_out(.clk(MAX10_CLK1_50),
 		.leds_export({hundreds, signs, LEDR}),
 		.keycode_export(keycode),
 		
+		//VGA
+		.vga_port_red(VGA_R),
+		.vga_port_green (VGA_G),
+		.vga_port_blue (VGA_B),
+		.vga_port_hs(VGA_HS),
+		.vga_port_vs(VGA_VS)
+		
 		
 	 );
 	 
 	 //  Move this to SoC once bus is interfaced
-	 rendering rend(
-		.Clk(MAX10_CLK1_50),
-		.Reset(Reset_h),
-		.hs(VGA_HS),
-		.vs(VGA_VS),
-		.red(VGA_R),
-		.green(VGA_G),
-		.blue(VGA_B)
-	 );
+//	 rendering rend(
+//		.Clk(MAX10_CLK1_50),
+//		.Reset(Reset_h),
+//		.hs(VGA_HS),
+//		.vs(VGA_VS),
+//		.red(VGA_R),
+//		.green(VGA_G),
+//		.blue(VGA_B)
+//	 );
 
 endmodule

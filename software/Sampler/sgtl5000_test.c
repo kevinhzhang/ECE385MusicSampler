@@ -15,7 +15,7 @@
 #include "sys/alt_irq.h"
 #include "sgtl5000/GenericTypeDefs.h"
 #include "sgtl5000/sgtl5000.h"
-
+#include "note_render.h"
 
 
 void setLED(int LED)
@@ -175,6 +175,7 @@ int main()
 	printf( "CHIP_ADCDAC_CTRL register: %x\n", SGTL5000_Reg_Rd (i2c_dev, SGTL5000_CHIP_ADCDAC_CTRL));
 	printf( "CHIP_PAD_STRENGTH register: %x\n", SGTL5000_Reg_Rd (i2c_dev, SGTL5000_CHIP_PAD_STRENGTH));
 
+	testsheet();
 
 	return 0;
 }
