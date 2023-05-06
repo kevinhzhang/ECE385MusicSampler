@@ -175,7 +175,9 @@ control ctrl(.clk(MAX10_CLK1_50),
 					.fft_start,
 					.output_index
 					);
-logic [15:0] real0, imag0, real1, imag1,doext, deext;
+logic [15:0] Y0, Y1, Y2, Y3;
+logic signed [15:0] real0, imag0, real1, imag1;
+logic [15:0]doext, deext;
 
 sext1216 so(.p(q_odd), .q(doext));
 sext1216 se(.p(q_even), .q(deext));
@@ -189,20 +191,20 @@ dft_top dft(.clk(MAX10_CLK1_50),
 				.X1(16'b0),
 				.X2(deext),
 				.X3(16'b0), 
-				.Y0(real0),
-				.Y1(imag0),
-				.Y2(real1),
-				.Y3(imag1));
-logic [33:0] r0, r1, max, bigger;
-logic newval, onebig;
-assign r0 = real0 * real0 + imag0 * imag0;
-assign r1 = real1 * real1 + imag1 * imag1;
-assign onebig = (r1 > r0);
-assign bigger = (onebig) ? r1 : r0;
-assign newval = (max > bigger);
-assign max = (newval) ? max : bigger;
-logic [9:0] output_idx; 
-assign output_idx = (newval) ? (2 * output_index + onebig) : output_idx;
+				.Y0,
+				.Y1,
+				.Y2,
+				.Y3);
+always_comb begin
+	real0 = Y0;
+	imag0 = Y1;
+	real1 = Y2;
+	imag1 = Y3;
+end
+logic [9:0] output_idx;
+logic signed [35:0] m0, m1;
+max_detect m(.clk(MAX10_CLK1_50), .*);
+
 //DEBUG OUTPUT
 i2s_output i2s_out(.clk(MAX10_CLK1_50), 
 				.sclk(ARDUINO_IO[5]),

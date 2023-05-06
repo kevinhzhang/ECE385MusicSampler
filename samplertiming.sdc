@@ -10,7 +10,7 @@ create_clock -period "10.0 MHz" [get_ports ADC_CLK_10]
 create_clock -period "50.0 MHz" [get_ports MAX10_CLK1_50]
 create_clock -period "50.0 MHz" [get_ports MAX10_CLK2_50]
 
-
+create_clock -period "44.1 KHz" [get_ports ARDUINO_IO[4]]
 
 
 # SDRAM CLK
@@ -77,6 +77,8 @@ set_output_delay -min -clock clk_dram_ext -0.9 [get_ports {DRAM_ADDR* DRAM_BA* D
 # Set False Path
 #**************************************************************
 
+set_false_path -from [get_ports {ARDUINO_IO[5]}]
+set_false_path -from [get_ports {ARDUINO_IO[4]}]
 
 
 #**************************************************************
