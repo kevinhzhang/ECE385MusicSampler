@@ -6,7 +6,8 @@
 
 
 #include <stdio.h>
-#include "system.h"
+#include <system.h>
+#include <time.h>
 #include "altera_avalon_spi.h"
 #include "altera_avalon_spi_regs.h"
 #include "altera_avalon_pio_regs.h"
@@ -174,8 +175,62 @@ int main()
 	SGTL5000_Reg_Wr(i2c_dev, SGTL5000_CHIP_ADCDAC_CTRL, 0x0000);
 	printf( "CHIP_ADCDAC_CTRL register: %x\n", SGTL5000_Reg_Rd (i2c_dev, SGTL5000_CHIP_ADCDAC_CTRL));
 	printf( "CHIP_PAD_STRENGTH register: %x\n", SGTL5000_Reg_Rd (i2c_dev, SGTL5000_CHIP_PAD_STRENGTH));
+//	int j = 0;
+	volatile int* i = (int*) FFT_BUCKET_BASE;
+	clear();
+//	testsheet();
 
-	testsheet();
+	int notebegin = 0;
+	int noteend = 0;
+	int previdx = 0;
+	int idx = 0;
+	int ppitch = 0;
+	int pitch = 0;
+//	TEMPO, in BPM
+	int tempo = 29;
+//	Clocks per time-interval:
+	int clks_per_interval = (60 * CLOCKS_PER_SEC) / (tempo * 4);
+	int notelength;
+	printf("%d \n", CLOCKS_PER_SEC);
+	struct NOTE n;
+	int ts = 0;
+	int b = 0;
+//	NOTE DRAWING STARTS HERE
+	while(1) {
+//		printf("%d %d\n", clks_per_interval, *i);
+		idx = *i;
 
+//		prevnote stores previous index
+//		note has changed
+		if(idx != previdx) {
+			noteend = clock();
+			notelength = (noteend - notebegin) / clks_per_interval;
+			ppitch = pitchtable(previdx);
+			pitch = pitchtable(idx);
+			if(ppitch > 40) {
+				n.DURATION = 0;
+			} else {
+				n.DURATION = notelength;
+			}
+			n.PITCH = ppitch;
+			b = drawnote(n, ts);
+			ts += b;
+			if(ts > 180) {
+				clear();
+				ts = 0;
+			}
+			printf("old idx: %d, new idx: %d; old duration: %d \n ", ppitch, pitch, notelength);
+			notebegin = clock();
+		}
+		if(clock() - notebegin > 16*clks_per_interval) {
+			notebegin = clock();
+			ppitch = pitchtable(idx);
+			printf("whole note %d \n",ppitch);
+		}
+		previdx = idx;
+//10000->54, 100000->517 clock ticks, each clock tick is .001 seconds
+//Each timeslice is 1/4
+//		j++;
+	}
 	return 0;
 }

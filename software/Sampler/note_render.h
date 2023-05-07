@@ -41,27 +41,27 @@ struct NOTE {
 
 static float positions[] = {
 		GRID_HEIGHT - 1, // F2 0
-		GRID_HEIGHT - 1, // 1
-		GRID_HEIGHT - 1.5, // 2
-		GRID_HEIGHT - 1.5, // 3
-		GRID_HEIGHT - 2, // 4
-		GRID_HEIGHT - 2, // 5
-		GRID_HEIGHT - 2.5, // 6
-		GRID_HEIGHT - 3, // 7
-		GRID_HEIGHT - 3, // 8
-		GRID_HEIGHT - 3.5, // 9
-		GRID_HEIGHT - 3.5, // 10
-		GRID_HEIGHT - 4, // 11
-		GRID_HEIGHT - 4.5, // 12
-		GRID_HEIGHT - 4.5, // 13
-		GRID_HEIGHT - 5, // 14
-		GRID_HEIGHT - 5, // 15
-		GRID_HEIGHT - 5.5, // 16
-		GRID_HEIGHT - 5.5, // 17
-		GRID_HEIGHT - 6, // 18
+		GRID_HEIGHT - 1, // 1 Fs
+		GRID_HEIGHT - 1.5, // 2 G
+		GRID_HEIGHT - 1.5, // 3 Gb
+		GRID_HEIGHT - 2, // 4 A
+		GRID_HEIGHT - 2, // 5 As
+		GRID_HEIGHT - 2.5, // 6 B
+		GRID_HEIGHT - 3, // 7 C
+		GRID_HEIGHT - 3, // 8 CS
+		GRID_HEIGHT - 3.5, // 9 D
+		GRID_HEIGHT - 3.5, // 10 Ds
+		GRID_HEIGHT - 4, // 11 E
+		GRID_HEIGHT - 4.5, // 12 F3
+		GRID_HEIGHT - 4.5, // 13 F3S
+		GRID_HEIGHT - 5, // 14 G
+		GRID_HEIGHT - 5, // 15 Ab
+		GRID_HEIGHT - 5.5, // 16 A
+		GRID_HEIGHT - 5.5, // 17 Bb
+		GRID_HEIGHT - 6, // 18 B
 		GRID_HEIGHT - 9, // MIDDLE C (C4) 19
-		GRID_HEIGHT - 9, // 20
-		GRID_HEIGHT - 9.5, // 21
+		GRID_HEIGHT - 9, // 20 CS4
+		GRID_HEIGHT - 9.5, // 21 D4
 		GRID_HEIGHT - 9.5, // 22
 		GRID_HEIGHT - 10, // 23
 		GRID_HEIGHT - 10.5, // 24
@@ -71,7 +71,7 @@ static float positions[] = {
 		GRID_HEIGHT - 11.5, // 28
 		GRID_HEIGHT - 11.5, // 29
 		GRID_HEIGHT - 12, // 30
-		GRID_HEIGHT - 12.5, // 31
+		GRID_HEIGHT - 12.5, // 31 C5
 		GRID_HEIGHT - 12.5, // 32
 		GRID_HEIGHT - 13, // 33
 		GRID_HEIGHT - 13, // 34
@@ -93,7 +93,7 @@ static volatile struct NOTE_RENDER_STRUCT* vram_ptr = VGA_MUSIC_RENDER_0_BASE;
 // amount by which timeslice should be incremented.
 // Returns -1 if error occurs.
 int drawNote(struct NOTE note, int timeslice);
-
+int pitchtable(int idx);
 // clears screen
 void clear();
 

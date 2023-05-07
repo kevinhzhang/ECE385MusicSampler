@@ -253,6 +253,64 @@ int drawnote(struct NOTE note, int timeslice) {
 
 	return incr;
 }
+int pitchtable(int idx) {
+	int pitch_mod = 0;
+	int return_note = -1;
+	if(idx == 0) {
+		return 0;
+	}
+	float hz = idx * 5.383;
+	float sub_mod = 5.383/2;
+//	hz is the lower bound of the "bin", each bin corresponds to
+//	printf("mom I'm not stuck in a for loop, %f \n ", hz);
+
+	while(hz < 250.0) {
+		hz = hz * 2;
+		pitch_mod = pitch_mod - 12;
+	}
+	while (hz > 501) {
+		hz = hz / 2;
+		pitch_mod = pitch_mod + 12;
+	}
+	if(hz > (483.88 - sub_mod)) {
+		return 30 + pitch_mod;
+	}
+	if(hz > (466.16 - sub_mod)) {
+		return 29 + pitch_mod;
+	}
+	if(hz > (440 - sub_mod)) {
+			return 28 + pitch_mod;
+		}
+	if(hz > (415.30 - sub_mod)) {
+			return 27 + pitch_mod;
+		}
+	if(hz > (392 - sub_mod)) {
+			return 26 + pitch_mod;
+		}
+	if(hz > (370 - sub_mod)) {
+			return 25 + pitch_mod;
+		}
+	if(hz > (349.23 - sub_mod)) {
+			return 24 + pitch_mod;
+		}
+	if(hz > (329.63 - sub_mod)) {
+			return 23 + pitch_mod;
+		}
+	if(hz > (311.13 - sub_mod)) {
+			return 22 + pitch_mod;
+		}
+	if(hz > (293.66	 - sub_mod)) {
+			return 21 + pitch_mod;
+		}
+	if(hz > (277.18	 - sub_mod)) {
+			return 20 + pitch_mod;
+		}
+	if(hz > (261.63	 - sub_mod)) {
+				return 19 + pitch_mod;
+			}
+
+	return -1;
+}
 
 void testsheet() {
 	clear();

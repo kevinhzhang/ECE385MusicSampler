@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2_gen2_0' in SOPC Builder design 'lab7_soc'
  * SOPC Builder design path: ../../lab7_soc.sopcinfo
  *
- * Generated: Thu Apr 20 03:56:15 CDT 2023
+ * Generated: Sat May 06 13:31:54 CDT 2023
  */
 
 /*
@@ -143,6 +143,34 @@
 #define __ALTERA_AVALON_TIMER
 #define __ALTERA_NIOS2_GEN2
 #define __ALTPLL
+#define __VGA_MUSIC_RENDER
+
+
+/*
+ * FFT_bucket configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_FFT_bucket altera_avalon_pio
+#define FFT_BUCKET_BASE 0x1e0
+#define FFT_BUCKET_BIT_CLEARING_EDGE_REGISTER 0
+#define FFT_BUCKET_BIT_MODIFYING_OUTPUT_REGISTER 0
+#define FFT_BUCKET_CAPTURE 0
+#define FFT_BUCKET_DATA_WIDTH 32
+#define FFT_BUCKET_DO_TEST_BENCH_WIRING 0
+#define FFT_BUCKET_DRIVEN_SIM_VALUE 0
+#define FFT_BUCKET_EDGE_TYPE "NONE"
+#define FFT_BUCKET_FREQ 50000000
+#define FFT_BUCKET_HAS_IN 1
+#define FFT_BUCKET_HAS_OUT 0
+#define FFT_BUCKET_HAS_TRI 0
+#define FFT_BUCKET_IRQ -1
+#define FFT_BUCKET_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define FFT_BUCKET_IRQ_TYPE "NONE"
+#define FFT_BUCKET_NAME "/dev/FFT_bucket"
+#define FFT_BUCKET_RESET_VALUE 0
+#define FFT_BUCKET_SPAN 16
+#define FFT_BUCKET_TYPE "altera_avalon_pio"
 
 
 /*
@@ -161,19 +189,19 @@
 #define ALT_NUM_INTERNAL_INTERRUPT_CONTROLLERS 1
 #define ALT_NUM_INTERRUPT_CONTROLLERS 1
 #define ALT_STDERR "/dev/jtag_uart_0"
-#define ALT_STDERR_BASE 0x288
+#define ALT_STDERR_BASE 0x298
 #define ALT_STDERR_DEV jtag_uart_0
 #define ALT_STDERR_IS_JTAG_UART
 #define ALT_STDERR_PRESENT
 #define ALT_STDERR_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDIN "/dev/jtag_uart_0"
-#define ALT_STDIN_BASE 0x288
+#define ALT_STDIN_BASE 0x298
 #define ALT_STDIN_DEV jtag_uart_0
 #define ALT_STDIN_IS_JTAG_UART
 #define ALT_STDIN_PRESENT
 #define ALT_STDIN_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDOUT "/dev/jtag_uart_0"
-#define ALT_STDOUT_BASE 0x288
+#define ALT_STDOUT_BASE 0x298
 #define ALT_STDOUT_DEV jtag_uart_0
 #define ALT_STDOUT_IS_JTAG_UART
 #define ALT_STDOUT_PRESENT
@@ -182,11 +210,25 @@
 
 
 /*
+ * VGA_music_render_0 configuration
+ *
+ */
+
+#define ALT_MODULE_CLASS_VGA_music_render_0 VGA_music_render
+#define VGA_MUSIC_RENDER_0_BASE 0x8000
+#define VGA_MUSIC_RENDER_0_IRQ -1
+#define VGA_MUSIC_RENDER_0_IRQ_INTERRUPT_CONTROLLER_ID -1
+#define VGA_MUSIC_RENDER_0_NAME "/dev/VGA_music_render_0"
+#define VGA_MUSIC_RENDER_0_SPAN 32768
+#define VGA_MUSIC_RENDER_0_TYPE "VGA_music_render"
+
+
+/*
  * accumulator configuration
  *
  */
 
-#define ACCUMULATOR_BASE 0x250
+#define ACCUMULATOR_BASE 0x260
 #define ACCUMULATOR_BIT_CLEARING_EDGE_REGISTER 0
 #define ACCUMULATOR_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define ACCUMULATOR_CAPTURE 0
@@ -225,7 +267,7 @@
  */
 
 #define ALT_MODULE_CLASS_hex_digits_pio altera_avalon_pio
-#define HEX_DIGITS_PIO_BASE 0x200
+#define HEX_DIGITS_PIO_BASE 0x210
 #define HEX_DIGITS_PIO_BIT_CLEARING_EDGE_REGISTER 0
 #define HEX_DIGITS_PIO_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define HEX_DIGITS_PIO_CAPTURE 0
@@ -252,7 +294,7 @@
  */
 
 #define ALT_MODULE_CLASS_i2c_0 altera_avalon_i2c
-#define I2C_0_BASE 0xc0
+#define I2C_0_BASE 0x100
 #define I2C_0_FIFO_DEPTH 32
 #define I2C_0_FREQ 50000000
 #define I2C_0_IRQ 4
@@ -269,7 +311,7 @@
  */
 
 #define ALT_MODULE_CLASS_jtag_uart_0 altera_avalon_jtag_uart
-#define JTAG_UART_0_BASE 0x288
+#define JTAG_UART_0_BASE 0x298
 #define JTAG_UART_0_IRQ 1
 #define JTAG_UART_0_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define JTAG_UART_0_NAME "/dev/jtag_uart_0"
@@ -287,7 +329,7 @@
  */
 
 #define ALT_MODULE_CLASS_key altera_avalon_pio
-#define KEY_BASE 0x1e0
+#define KEY_BASE 0x1f0
 #define KEY_BIT_CLEARING_EDGE_REGISTER 0
 #define KEY_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define KEY_CAPTURE 0
@@ -314,7 +356,7 @@
  */
 
 #define ALT_MODULE_CLASS_keycode altera_avalon_pio
-#define KEYCODE_BASE 0x240
+#define KEYCODE_BASE 0x250
 #define KEYCODE_BIT_CLEARING_EDGE_REGISTER 0
 #define KEYCODE_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define KEYCODE_CAPTURE 0
@@ -341,7 +383,7 @@
  */
 
 #define ALT_MODULE_CLASS_leds_pio altera_avalon_pio
-#define LEDS_PIO_BASE 0x1f0
+#define LEDS_PIO_BASE 0x200
 #define LEDS_PIO_BIT_CLEARING_EDGE_REGISTER 0
 #define LEDS_PIO_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define LEDS_PIO_CAPTURE 0
@@ -436,7 +478,7 @@
  */
 
 #define ALT_MODULE_CLASS_sdram_pll altpll
-#define SDRAM_PLL_BASE 0x260
+#define SDRAM_PLL_BASE 0x270
 #define SDRAM_PLL_IRQ -1
 #define SDRAM_PLL_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define SDRAM_PLL_NAME "/dev/sdram_pll"
@@ -481,13 +523,13 @@
  */
 
 #define ALT_MODULE_CLASS_sysid_qsys_0 altera_avalon_sysid_qsys
-#define SYSID_QSYS_0_BASE 0x280
+#define SYSID_QSYS_0_BASE 0x290
 #define SYSID_QSYS_0_ID 0
 #define SYSID_QSYS_0_IRQ -1
 #define SYSID_QSYS_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define SYSID_QSYS_0_NAME "/dev/sysid_qsys_0"
 #define SYSID_QSYS_0_SPAN 8
-#define SYSID_QSYS_0_TIMESTAMP 1681962844
+#define SYSID_QSYS_0_TIMESTAMP 1683397200
 #define SYSID_QSYS_0_TYPE "altera_avalon_sysid_qsys"
 
 
@@ -498,7 +540,7 @@
 
 #define ALT_MODULE_CLASS_timer_0 altera_avalon_timer
 #define TIMER_0_ALWAYS_RUN 0
-#define TIMER_0_BASE 0x100
+#define TIMER_0_BASE 0xc0
 #define TIMER_0_COUNTER_SIZE 64
 #define TIMER_0_FIXED_PERIOD 0
 #define TIMER_0_FREQ 50000000
@@ -523,7 +565,7 @@
  */
 
 #define ALT_MODULE_CLASS_usb_gpx altera_avalon_pio
-#define USB_GPX_BASE 0x220
+#define USB_GPX_BASE 0x230
 #define USB_GPX_BIT_CLEARING_EDGE_REGISTER 0
 #define USB_GPX_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define USB_GPX_CAPTURE 0
@@ -550,7 +592,7 @@
  */
 
 #define ALT_MODULE_CLASS_usb_irq altera_avalon_pio
-#define USB_IRQ_BASE 0x230
+#define USB_IRQ_BASE 0x240
 #define USB_IRQ_BIT_CLEARING_EDGE_REGISTER 0
 #define USB_IRQ_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define USB_IRQ_CAPTURE 0
@@ -577,7 +619,7 @@
  */
 
 #define ALT_MODULE_CLASS_usb_rst altera_avalon_pio
-#define USB_RST_BASE 0x210
+#define USB_RST_BASE 0x220
 #define USB_RST_BIT_CLEARING_EDGE_REGISTER 0
 #define USB_RST_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define USB_RST_CAPTURE 0
