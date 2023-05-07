@@ -6,6 +6,7 @@
 module lab7_soc (
 		input  wire        accum_export,                   //                   accum.export
 		input  wire        clk_clk,                        //                     clk.clk
+		input  wire [31:0] fft_bucket_export,              //              fft_bucket.export
 		output wire [15:0] hex_digits_export,              //              hex_digits.export
 		input  wire        i2c0_sda_in,                    //                    i2c0.sda_in
 		input  wire        i2c0_scl_in,                    //                        .scl_in
@@ -135,6 +136,8 @@ module lab7_soc (
 	wire  [31:0] mm_interconnect_0_leds_pio_s1_writedata;                      // mm_interconnect_0:leds_pio_s1_writedata -> leds_pio:writedata
 	wire  [31:0] mm_interconnect_0_key_s1_readdata;                            // key:readdata -> mm_interconnect_0:key_s1_readdata
 	wire   [1:0] mm_interconnect_0_key_s1_address;                             // mm_interconnect_0:key_s1_address -> key:address
+	wire  [31:0] mm_interconnect_0_fft_bucket_s1_readdata;                     // FFT_bucket:readdata -> mm_interconnect_0:FFT_bucket_s1_readdata
+	wire   [1:0] mm_interconnect_0_fft_bucket_s1_address;                      // mm_interconnect_0:FFT_bucket_s1_address -> FFT_bucket:address
 	wire         mm_interconnect_0_spi_0_spi_control_port_chipselect;          // mm_interconnect_0:spi_0_spi_control_port_chipselect -> spi_0:spi_select
 	wire  [15:0] mm_interconnect_0_spi_0_spi_control_port_readdata;            // spi_0:data_to_cpu -> mm_interconnect_0:spi_0_spi_control_port_readdata
 	wire   [2:0] mm_interconnect_0_spi_0_spi_control_port_address;             // mm_interconnect_0:spi_0_spi_control_port_address -> spi_0:mem_addr
@@ -146,11 +149,19 @@ module lab7_soc (
 	wire         irq_mapper_receiver2_irq;                                     // timer_0:irq -> irq_mapper:receiver2_irq
 	wire         irq_mapper_receiver3_irq;                                     // spi_0:irq -> irq_mapper:receiver3_irq
 	wire  [31:0] nios2_gen2_0_irq_irq;                                         // irq_mapper:sender_irq -> nios2_gen2_0:irq
-	wire         rst_controller_reset_out_reset;                               // rst_controller:reset_out -> [VGA_music_render_0:Reset, mm_interconnect_0:VGA_music_render_0_Reset_reset_bridge_in_reset_reset]
+	wire         rst_controller_reset_out_reset;                               // rst_controller:reset_out -> [FFT_bucket:reset_n, VGA_music_render_0:Reset, mm_interconnect_0:VGA_music_render_0_Reset_reset_bridge_in_reset_reset]
 	wire         rst_controller_001_reset_out_reset;                           // rst_controller_001:reset_out -> [accumulator:reset_n, hex_digits_pio:reset_n, i2c_0:rst_n, irq_mapper:reset, jtag_uart_0:rst_n, key:reset_n, keycode:reset_n, leds_pio:reset_n, mm_interconnect_0:nios2_gen2_0_reset_reset_bridge_in_reset_reset, nios2_gen2_0:reset_n, onchip_memory2_0:reset, rst_translator:in_reset, sdram_pll:reset, spi_0:reset_n, sysid_qsys_0:reset_n, timer_0:reset_n, usb_gpx:reset_n, usb_irq:reset_n, usb_rst:reset_n]
 	wire         rst_controller_001_reset_out_reset_req;                       // rst_controller_001:reset_req -> [nios2_gen2_0:reset_req, onchip_memory2_0:reset_req, rst_translator:reset_req_in]
 	wire         nios2_gen2_0_debug_reset_request_reset;                       // nios2_gen2_0:debug_reset_request -> [rst_controller_001:reset_in1, rst_controller_002:reset_in1]
 	wire         rst_controller_002_reset_out_reset;                           // rst_controller_002:reset_out -> [mm_interconnect_0:sdram_reset_reset_bridge_in_reset_reset, sdram:reset_n]
+
+	lab7_soc_FFT_bucket fft_bucket (
+		.clk      (clk_clk),                                  //                 clk.clk
+		.reset_n  (~rst_controller_reset_out_reset),          //               reset.reset_n
+		.address  (mm_interconnect_0_fft_bucket_s1_address),  //                  s1.address
+		.readdata (mm_interconnect_0_fft_bucket_s1_readdata), //                    .readdata
+		.in_port  (fft_bucket_export)                         // external_connection.export
+	);
 
 	rendering vga_music_render_0 (
 		.Clk           (clk_clk),                                                      //          Clk.clk
@@ -430,6 +441,8 @@ module lab7_soc (
 		.nios2_gen2_0_instruction_master_readdata             (nios2_gen2_0_instruction_master_readdata),                     //                                               .readdata
 		.accumulator_s1_address                               (mm_interconnect_0_accumulator_s1_address),                     //                                 accumulator_s1.address
 		.accumulator_s1_readdata                              (mm_interconnect_0_accumulator_s1_readdata),                    //                                               .readdata
+		.FFT_bucket_s1_address                                (mm_interconnect_0_fft_bucket_s1_address),                      //                                  FFT_bucket_s1.address
+		.FFT_bucket_s1_readdata                               (mm_interconnect_0_fft_bucket_s1_readdata),                     //                                               .readdata
 		.hex_digits_pio_s1_address                            (mm_interconnect_0_hex_digits_pio_s1_address),                  //                              hex_digits_pio_s1.address
 		.hex_digits_pio_s1_write                              (mm_interconnect_0_hex_digits_pio_s1_write),                    //                                               .write
 		.hex_digits_pio_s1_readdata                           (mm_interconnect_0_hex_digits_pio_s1_readdata),                 //                                               .readdata

@@ -32,7 +32,8 @@ module lab7_soc (
 	vga_port_red,
 	vga_port_green,
 	vga_port_hs,
-	vga_port_vs);	
+	vga_port_vs,
+	fft_bucket_export);	
 
 	input		accum_export;
 	input		clk_clk;
@@ -67,4 +68,5 @@ module lab7_soc (
 	output	[3:0]	vga_port_green;
 	output		vga_port_hs;
 	output		vga_port_vs;
+	input	[31:0]	fft_bucket_export;
 endmodule
